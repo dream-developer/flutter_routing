@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   final router = GoRouter( // 2
+    debugLogDiagnostics: true, // 遷移のデバッグ出力をする
     initialLocation: '/a', // 3
     routes: [
       GoRoute( // 4
@@ -57,7 +58,11 @@ class ScreenA extends StatelessWidget {
               onPressed: () => context.push('/b'), 
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red[50]),
               child: const Text("【Bに進む】context.push('/b')"),
-             )
+             ),
+            ElevatedButton(
+              onPressed: () => context.go('/c'), 
+              child: const Text("Cを指定し直接行く】context.go('/c')"),
+             ),
           ],
         ),
       ),
