@@ -18,8 +18,15 @@ class MyApp extends StatelessWidget {
         builder: (context, state) => const ScreenA(), // 6
       ),
       GoRoute(
-        path: '/b',
-        builder: (context, state) => const ScreenB(),
+        path: '/b/:id/:code', // idとcodeの２つのパラメータを受け取る例
+        builder: (context, state) {
+          final id = state.pathParameters['id']; // パラメータを受け取ります
+          final code = state.pathParameters['code'];
+              return ScreenB(
+                id: int.parse(id!), // int型にして渡す
+                code: code!,
+              );
+        },
       ),
       GoRoute(
         path: '/c',
@@ -40,7 +47,6 @@ class MyApp extends StatelessWidget {
 
 class ScreenA extends StatelessWidget {
   const ScreenA({super.key});
-
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
@@ -55,7 +61,8 @@ class ScreenA extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             ElevatedButton(
-              onPressed: () => context.push('/b'), 
+              //onPressed: () => context.push('/b'),
+              onPressed: () => context.push('/b/100/abcd'),
               style: ElevatedButton.styleFrom(backgroundColor: Colors.red[50]),
               child: const Text("【Bに進む】context.push('/b')"),
              ),
@@ -71,20 +78,33 @@ class ScreenA extends StatelessWidget {
 }
 
 class ScreenB extends StatelessWidget {
-  const ScreenB({super.key});
+  const ScreenB({ 
+    super.key,
+    required this.id,
+    required this.code,
+  });
+
+  final int id;
+  final String code;
+
   @override
   Widget build(BuildContext context) {
+    
+    String idStr = "$id";
+
     final appBar = AppBar(
       backgroundColor: Colors.yellow[50],
       title: const Text('スクリーンB'),
     );
-
     return Scaffold(
       appBar: appBar,
       body: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
+
+            Text("id:$idStr, code:$code"),
+            
             ElevatedButton(
               onPressed: () => context.pop(),
               child: const Text('【戻る】context.pop()'),
